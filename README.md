@@ -43,7 +43,11 @@ git push -u origin main
 
 ## 3. Struktur Proyek
 
+Starter ini hanya menyertakan platform **Android** dan **Web (Chrome)**, sesuai perangkat uji di modul. Kalau perlu platform lain, tambahkan dengan `flutter create --platforms=windows .` (ganti `windows` dengan `ios`, `macos`, atau `linux`).
+
 ```
+android/                      # platform Android
+web/                          # platform Web (Chrome)
 lib/
 |- main.dart                  # Langkah 4: mendaftarkan ChangeNotifierProvider
 |- models/
