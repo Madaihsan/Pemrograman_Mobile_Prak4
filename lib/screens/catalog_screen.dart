@@ -2,6 +2,7 @@
 // Memakai context.read karena hanya memanggil addItem,
 // tanpa perlu dibangun ulang saat data berubah.
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../models/item.dart';
@@ -22,23 +23,16 @@ class CatalogScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Katalog Barang'),
         actions: [
-          // TODO(Tugas 2 - wajib): Badge jumlah barang.
-          // Ganti IconButton di bawah dengan versi yang dibungkus
-          // Consumer<CartProvider>, lalu bungkus Icon dengan widget Badge:
-          //
-          // Consumer<CartProvider>(
-          //   builder: (context, cart, child) => IconButton(
-          //     onPressed: () => Navigator.pushNamed(context, '/cart'),
-          //     icon: Badge(
-          //       isLabelVisible: cart.items.isNotEmpty,
-          //       label: Text('${cart.items.length}'),
-          //       child: const Icon(Icons.shopping_cart),
-          //     ),
-          //   ),
-          // ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () => Navigator.pushNamed(context, '/cart'),
+          // Tugas 2: Badge jumlah barang.
+          Consumer<CartProvider>(
+            builder: (context, cart, child) => IconButton(
+              onPressed: () => Navigator.pushNamed(context, '/cart'),
+              icon: Badge(
+                isLabelVisible: cart.items.isNotEmpty,
+                label: Text('${cart.items.length}'),
+                child: const Icon(Icons.shopping_cart),
+              ),
+            ),
           ),
         ],
       ),
@@ -48,14 +42,14 @@ class CatalogScreen extends StatelessWidget {
           final item = catalog[index];
           return ListTile(
             title: Text(item.name),
-            // TODO(Tugas 3 - wajib): Format Rupiah.
-            // Ubah 'Rp 10000000' menjadi 'Rp 10.000.000'.
-            // Package intl sudah ada di pubspec.yaml. Langkah:
-            //   1. import 'package:intl/intl.dart';
-            //   2. NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0)
-            //          .format(item.price)
-            // Terapkan juga di cart_screen.dart (harga item dan total).
-            subtitle: Text('Rp ${item.price}'),
+            // Tugas 3: Format Rupiah.
+            subtitle: Text(
+              NumberFormat.currency(
+                locale: 'id_ID',
+                symbol: 'Rp ',
+                decimalDigits: 0,
+              ).format(item.price),
+            ),
             trailing: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {

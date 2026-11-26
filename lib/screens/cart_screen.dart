@@ -1,6 +1,7 @@
 // Langkah 6 — Halaman Keranjang
 // Halaman ini harus bereaksi saat data berubah, sehingga memakai Consumer.
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
@@ -14,6 +15,11 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Keranjang Saya')),
       body: Consumer<CartProvider>(
         builder: (context, cart, child) {
+          final rupiah = NumberFormat.currency(
+            locale: 'id_ID',
+            symbol: 'Rp ',
+            decimalDigits: 0,
+          );
           return Column(
             children: [
               Expanded(
@@ -25,13 +31,15 @@ class CartScreen extends StatelessWidget {
                           final item = cart.items[index];
                           return ListTile(
                             title: Text(item.name),
-                            // TODO(Tugas 3 - wajib): Format Rupiah (sama seperti di Katalog).
-                            subtitle: Text('Rp ${item.price}'),
-                            // TODO(Tugas 1b - wajib): Hapus per item — bagian tampilan.
-                            // Tambahkan properti trailing berupa IconButton dengan
-                            // ikon tempat sampah (Icons.delete) yang memanggil
-                            // cart.removeItem(item). Selesai jika item hilang dari
-                            // daftar dan total harga ikut berkurang.
+                            // Tugas 3: Format Rupiah tiap item.
+                            subtitle: Text(rupiah.format(item.price)),
+                            // Tugas 1b: Hapus per item — bagian tampilan.
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                cart.removeItem(item);
+                              },
+                            ),
                           );
                         },
                       ),
@@ -43,8 +51,8 @@ class CartScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      // TODO(Tugas 3 - wajib): Format Rupiah untuk total harga.
-                      'Total: Rp ${cart.totalPrice}',
+                      // Tugas 3: Format Rupiah untuk total harga.
+                      'Total: ${rupiah.format(cart.totalPrice)}',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),

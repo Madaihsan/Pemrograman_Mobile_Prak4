@@ -17,11 +17,11 @@ class CartProvider extends ChangeNotifier {
     notifyListeners(); // PENTING: memberi tahu UI bahwa data berubah
   }
 
-  // TODO(Tugas 1a - wajib): Hapus per item — bagian logika.
-  // Tambahkan method removeItem(Item item) yang:
-  //   1. memanggil _items.remove(item)
-  //   2. lalu memanggil notifyListeners()
-  // Lanjutkan ke Tugas 1b di lib/screens/cart_screen.dart.
+  // Tugas 1a: Hapus per item — bagian logika.
+  void removeItem(Item item) {
+    _items.remove(item);
+    notifyListeners();
+  }
 
   void clearCart() {
     _items.clear();
