@@ -1,12 +1,9 @@
-// Langkah 5 — Halaman Katalog
-// Memakai context.read karena hanya memanggil addItem,
-// tanpa perlu dibangun ulang saat data berubah.
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
+import '../controllers/cart_controller.dart';
 import '../models/item.dart';
-import '../providers/cart_provider.dart';
 
 class CatalogScreen extends StatelessWidget {
   const CatalogScreen({super.key});
@@ -19,17 +16,19 @@ class CatalogScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CartController cartController = Get.find<CartController>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Katalog Barang'),
+        title: const Text('Katalog Barang (GetX)'),
         actions: [
-          // Tugas 2: Badge jumlah barang.
-          Consumer<CartProvider>(
-            builder: (context, cart, child) => IconButton(
+          // Badge reaktif menggunakan Obx dari GetX
+          Obx(
+            () => IconButton(
               onPressed: () => Navigator.pushNamed(context, '/cart'),
               icon: Badge(
-                isLabelVisible: cart.items.isNotEmpty,
-                label: Text('${cart.items.length}'),
+                isLabelVisible: cartController.items.isNotEmpty,
+                label: Text('${cartController.items.length}'),
                 child: const Icon(Icons.shopping_cart),
               ),
             ),
@@ -42,7 +41,6 @@ class CatalogScreen extends StatelessWidget {
           final item = catalog[index];
           return ListTile(
             title: Text(item.name),
-            // Tugas 3: Format Rupiah.
             subtitle: Text(
               NumberFormat.currency(
                 locale: 'id_ID',
@@ -53,7 +51,7 @@ class CatalogScreen extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                context.read<CartProvider>().addItem(item);
+                cartController.addItem(item);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('${item.name} ditambahkan!')),
                 );

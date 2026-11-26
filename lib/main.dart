@@ -1,19 +1,14 @@
-// Langkah 4 — Mendaftarkan Provider
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
-import 'providers/cart_provider.dart';
+import 'controllers/cart_controller.dart';
 import 'screens/cart_screen.dart';
 import 'screens/catalog_screen.dart';
 
 void main() {
-  runApp(
-    // Bungkus aplikasi agar CartProvider bisa diakses dari semua halaman.
-    ChangeNotifierProvider(
-      create: (context) => CartProvider(),
-      child: const MyApp(),
-    ),
-  );
+  // Daftarkan CartController secara global menggunakan GetX Dependency Injection
+  Get.put(CartController());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,8 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'State Management',
+    return GetMaterialApp(
+      title: 'State Management (GetX)',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.blue),
       home: const CatalogScreen(),
@@ -32,7 +27,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// TODO(Tugas 4 - nilai tambahan): Refactoring challenge.
-// Buat ulang aplikasi yang sama dengan Riverpod, Bloc, atau GetX
-// (sebaiknya di branch/proyek terpisah), lalu bandingkan di laporan.

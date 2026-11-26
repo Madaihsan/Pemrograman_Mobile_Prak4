@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'package:state_management_demo/controllers/cart_controller.dart';
 import 'package:state_management_demo/main.dart';
-import 'package:state_management_demo/providers/cart_provider.dart';
 
 void main() {
-  testWidgets('Tambah barang lalu checkout mengosongkan keranjang',
+  testWidgets('Tambah barang lalu checkout mengosongkan keranjang (GetX)',
       (tester) async {
-    await tester.pumpWidget(ChangeNotifierProvider(
-      create: (_) => CartProvider(),
-      child: const MyApp(),
-    ));
+    Get.reset();
+    Get.put(CartController());
+
+    await tester.pumpWidget(const MyApp());
 
     await tester.tap(find.byIcon(Icons.add).first); // tambah Laptop
     await tester.pumpAndSettle(); // animasi SnackBar muncul
@@ -22,11 +22,7 @@ void main() {
 
     expect(find.text('Laptop'), findsOneWidget);
     await tester.tap(find.text('Checkout'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(find.text('Keranjang kosong'), findsOneWidget);
   });
-
-  // TODO(Opsional): setelah Tugas 1 selesai, tambahkan test untuk removeItem.
-  // Contoh: tambah 1 barang, buka keranjang, tap Icons.delete,
-  // lalu pastikan teks 'Keranjang kosong' muncul.
 }
